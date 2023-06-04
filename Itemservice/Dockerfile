@@ -1,4 +1,4 @@
-FROM openjdk:latest
+FROM eclipse-temurin:17
 VOLUME /tmp
 ARG JAR_FILE=build/libs/Itemservice.jar
 COPY ${JAR_FILE} app.jar

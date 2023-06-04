@@ -1,5 +1,4 @@
-package com.example.itemservice.model;
-
+package com.example.orderservice.models;
 
 
 import jakarta.persistence.*;
@@ -29,5 +28,3 @@ public class Items {
         this.pris = pris;
     }
 }
-
-

@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+
+  database:
+    image: mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - '3307:3306'
+    networks:
+      - MyNetwork
+
+  orderservice:
+    build: ./OrderService
+    ports:
+      - '8080:8080'
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CUSTOMERSERVICE_URL=http://customerservice:8083
+      - ITEMSERVICE_URL=http://itemservice:8082
+    networks:
+      - MyNetwork
+
+  itemservice:
+    build: ./Itemservice
+    ports:
+      - '8082:8080'
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CUSTOMERSERVICE_URL=http://customerservice:8083
+      - ORDERSERVICE_URL=http://orderservice:8080
+    networks:
+      - MyNetwork
+
+  customerservice:
+    build: ./Customerservice
+    ports:
+      - '8083:8080'
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - ITEMSERVICE_URL=http://itemservice:8082
+      - ORDERSERVICE_URL=http://orderservice:8080
+    networks:
+      - MyNetwork
+
+networks:
+  MyNetwork:
+    driver: bridge

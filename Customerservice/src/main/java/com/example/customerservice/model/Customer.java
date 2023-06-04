@@ -1,11 +1,9 @@
 package com.example.customerservice.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import lombok.AccessLevel;
+
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +11,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Customer {
 
@@ -24,4 +22,8 @@ public class Customer {
     protected String name;
     protected long personnummer;
 
+    public Customer(String name, long personnummer) {
+        this.name = name;
+        this.personnummer = personnummer;
+    }
 }
