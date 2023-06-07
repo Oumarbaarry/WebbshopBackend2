@@ -11,6 +11,7 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
     ports:
       - '3307:3306'
+
     networks:
       - MyNetwork
 

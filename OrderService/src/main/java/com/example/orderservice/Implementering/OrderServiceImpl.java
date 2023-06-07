@@ -1,5 +1,6 @@
 package com.example.orderservice.Implementering;
 
+
 import com.example.orderservice.models.CreateOrder;
 import com.example.orderservice.models.Customer;
 import com.example.orderservice.models.Items;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-
-
 
 @Service
 public class OrderServiceImpl {
@@ -40,6 +39,7 @@ public class OrderServiceImpl {
         return orderRepository.findAll();
     }
 
+    // Hämtar en order baserat på ID
     public ResponseEntity<Object> OrderById(long id) {
         Orders order = orderRepository.findById(id).orElse(null);
         if (order == null) {
@@ -49,8 +49,9 @@ public class OrderServiceImpl {
         }
     }
 
-
+    // Köper en vara och skapar en order
     public ResponseEntity<Object> buyItem(CreateOrder createOrder) {
+        // Hämtar kundinformation från kundtjänsten
         ResponseEntity<Customer> customerResponse = getCustomer(createOrder.getCustomerId());
         if (customerResponse.getStatusCode() != HttpStatus.OK) {
             return new ResponseEntity<>(Collections.singletonMap("error", "Customer not found"), HttpStatus.NOT_FOUND);
@@ -64,15 +65,18 @@ public class OrderServiceImpl {
         List<Long> itemIds = createOrder.getItemIds();
         List<Items> items = new ArrayList<>();
         for (Long itemId : itemIds) {
+            // Hämtar varuinformation från varutjänsten
             ResponseEntity<Items> response = restTemplate.getForEntity(itemUrl + "/items/" + itemId, Items.class);
             if (response.getStatusCode() == HttpStatus.OK) {
                 items.add(response.getBody());
             }
         }
 
+        // Skapar en ny order
         Orders order = new Orders(createOrder.getOrderDate(), createOrder.getCustomerId(), createOrder.getItemIds());
         orderRepository.save(order);
 
+        // Sätter ihop svar med kundinformation, orderinformation och varuinformation
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("customer", customer);
         responseData.put("order", order);
@@ -80,6 +84,7 @@ public class OrderServiceImpl {
         return new ResponseEntity<>(responseData, HttpStatus.CREATED);
     }
 
+    // Hämtar kundinformation från kundtjänsten
     private ResponseEntity<Customer> getCustomer(long customerId) {
         try {
             ResponseEntity<Customer> responseEntity = restTemplate.getForEntity(customerUrl + "/customers/" + customerId, Customer.class);
@@ -89,6 +94,4 @@ public class OrderServiceImpl {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
