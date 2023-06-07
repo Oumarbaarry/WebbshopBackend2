@@ -31,10 +31,6 @@ public class OrderController {
         return orderService.OrderById(id);
     }
 
-    @GetMapping("/items")
-    public ResponseEntity<Object> getAllOrdersWithItems() {
-        return orderService.getAllOrdersWithItems();
-    }
 
     @PostMapping("/buy")
     public ResponseEntity<Object> buyItem(@RequestBody CreateOrder createOrder) {

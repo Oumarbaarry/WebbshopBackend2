@@ -21,8 +21,8 @@ services:
     environment:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - CUSTOMERSERVICE_URL=http://customerservice:8083
-      - ITEMSERVICE_URL=http://itemservice:8082
+      - CUSTOMERSERVICE_URL=http://customerservice:8080
+      - ITEMSERVICE_URL=http://itemservice:8080
     networks:
       - MyNetwork
 
@@ -33,7 +33,7 @@ services:
     environment:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - CUSTOMERSERVICE_URL=http://customerservice:8083
+      - CUSTOMERSERVICE_URL=http://customerservice:8080
       - ORDERSERVICE_URL=http://orderservice:8080
     networks:
       - MyNetwork
@@ -45,7 +45,7 @@ services:
     environment:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - ITEMSERVICE_URL=http://itemservice:8082
+      - ITEMSERVICE_URL=http://itemservice:8080
       - ORDERSERVICE_URL=http://orderservice:8080
     networks:
       - MyNetwork

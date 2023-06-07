@@ -1,7 +1,7 @@
 package com.example.customerservice.controllers;
 
 
-import com.example.customerservice.gränssnitt.CustomerService;
+
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.CustomerRepo;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import java.util.Optional;
 @RequestMapping()
 public class CustomerController {
     private final CustomerRepo customerRepo;
-    private final CustomerService customerService;
 
-    public CustomerController(CustomerRepo customerRepo, CustomerService customerService) {
+
+    public CustomerController(CustomerRepo customerRepo) {
         this.customerRepo = customerRepo;
-        this.customerService = customerService;
+
     }
 
     @GetMapping("/customers")
@@ -38,9 +38,9 @@ public class CustomerController {
     }
 
 
-    @PostMapping
+    @PostMapping("/customers")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        Customer savedCustomer = customerService.createCustomer(customer);
+        Customer savedCustomer = customerRepo.save(customer);
         return ResponseEntity.created(URI.create("/customers/" + savedCustomer.getId())).body(savedCustomer);
     }
 }
